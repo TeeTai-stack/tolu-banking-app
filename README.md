@@ -19,7 +19,7 @@ made at each stage.
 
 - [ ] Create and manage multiple customers and accounts
 - [ ] Support for multiple account types (Savings, Current, ISA)
-- [ ] Deposits, withdrawals, and transfers with validation
+- [X] Deposits, withdrawals, and transfers with validation
 - [ ] Interest calculation per account type
 - [ ] Transaction history and receipts
 - [ ] Notification on large transactions

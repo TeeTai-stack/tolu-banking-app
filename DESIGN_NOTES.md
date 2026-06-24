@@ -27,7 +27,41 @@ decision you made on this project."
 
 ## Phase 1 — Foundations
 
-_To be completed._
+**Decision:** `Balance` uses `{ get; private set; }` rather than a fully public setter.
+
+**Why:** Encapsulation — the only legitimate way to change an account's balance
+is through `Deposit()`/`Withdraw()`, which validate the amount first (no
+negative deposits, no overdrawing). A public setter would let any code bypass
+those rules entirely (e.g. `account.Balance = -500;`), which a real banking
+system can't allow.
+
+**Decision:** `AccountNumber` and `Owner` use `{ get; }` with no `set` at all.
+
+**Why:** These values are fixed at the point an account is opened and should
+never change afterward. `private set` would still allow internal code to
+change them later; using no `set` at all is stricter and matches the real-world
+rule that an account number doesn't change.
+
+**Decision:** `decimal` instead of `double`/`float` for `Balance`.
+
+**Why:** `double`/`float` can introduce small rounding errors in arithmetic,
+which is unacceptable for monetary values. `decimal` is the type .NET
+recommends specifically for financial calculations.
+
+**Decision:** `_transactionLog` is a private `List<string>` with no public
+property wrapper at all (not even a `get`).
+
+**Why:** Stricter encapsulation than `Balance` — external code shouldn't see
+the raw log directly under any circumstance, only through
+`PrintTransactionHistory()`, which controls how it's displayed.
+
+**Decision:** Two separate validation checks in `Withdraw()` (`amount <= 0`
+and `amount > Balance`), each throwing its own exception with a distinct
+message.
+
+**Why:** These are two different failure conditions ("invalid input" vs.
+"insufficient funds") that a caller or future error-handling code may want
+to distinguish between, rather than collapsing into one generic error.
 
 ---
 
